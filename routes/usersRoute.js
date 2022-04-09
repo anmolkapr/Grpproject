@@ -21,14 +21,15 @@ router.post("/register", async (req, res) => {
 
 router.post("/login",async(req,res)=>{
     try {
-        const user= await User.findOne({username:req.body.username, password:req.body.password})
+        //const user= await User.findOne({username:req.body.username, password:req.body.password})
+        const user= await User.findOne({username:req.body.username})
         if (user)
-       { res.send(`${user.username} Logged in successfully`)
-            // if(user.matchPassword(req.body.password)){
-            //     res.send(`${user.username} logged in successfully`)
-            // }else{
-            //    return res.send("Invalid password")
-            // }           
+         { //res.send(`${user.username} Logged in successfully`)
+            if(await user.matchPassword(req.body.password)){
+                res.send(`${user.username} logged in successfully`)
+            }else{
+               return res.send("Invalid password")
+            }           
        } else
             res.send("Invalid credentials")
     } catch (error) {
